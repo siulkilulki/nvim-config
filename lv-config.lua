@@ -4,6 +4,7 @@
 lvim.format_on_save = true
 lvim.lint_on_save = true
 lvim.colorscheme = "spacegray"
+vim.opt.relativenumber = true
 
 -- keymappings
 lvim.leader = "space"
