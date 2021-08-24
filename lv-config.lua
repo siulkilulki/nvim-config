@@ -11,18 +11,20 @@ lvim.leader = "space"
 -- overwrite the key-mappings provided by LunarVim for any mode, or leave it empty to keep them
 lvim.keys.normal_mode = {
   {'<TAB>', '<C-w>w'},
-  {'<C-l>', ':BufferNext<CR>'},
-  {'<C-h>', ':BufferPrevious<CR>'},
+  {'<A-l>', ':BufferNext<CR>'},
+  {'<A-h>', ':BufferPrevious<CR>'},
   {'<C-x>', ':bd<CR>'},
+  {'<C-l>', ':BufferMoveNext<CR>'},
+  {'<C-h>', ':BufferMovePrevious<CR>'},
 }
 -- if you just want to augment the existing ones then use the utility function
-require("utils").add_keymap_normal_mode({ silent = true }, {
-  {'<S-l>', ':BufferMoveNext<CR>'},
-  {'<S-h>', ':BufferMovePrevious<CR>'},
-})
+-- require("utils").add_keymap_normal_mode({ silent = true }, {
+  -- {'<S-h>', ':BufferMovePrevious<CR>'},
+-- })
 
 -- Swap ':' with ';'
 vim.api.nvim_set_keymap('', ';', ':', {noremap = true})
+vim.api.nvim_set_keymap('', ':', ';', {noremap = true})
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
@@ -38,6 +40,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Python
 lvim.lang.python.formatter.exe = "black"
+lvim.lang.python.linters = { "mypy" }
 
 -- generic LSP settings
 -- you can set a custom on_attach function that will be used for all the language servers
@@ -62,7 +65,8 @@ lvim.plugins = {
       event = "BufRead"
     }
 }
-
+vim.g["sneak#s_next"] = 1
+vim.g["sneak#label"] = 1
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
