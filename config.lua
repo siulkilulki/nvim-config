@@ -3,19 +3,19 @@
 -- general
 lvim.format_on_save = true
 lvim.lint_on_save = true
-lvim.colorscheme = "spacegray"
+lvim.colorscheme = "onedarker"
 vim.opt.relativenumber = true
 
 -- keymappings
 lvim.leader = "space"
 -- overwrite the key-mappings provided by LunarVim for any mode, or leave it empty to keep them
 lvim.keys.normal_mode = {
-  {'<TAB>', '<C-w>w'},
-  {'<A-l>', ':BufferNext<CR>'},
-  {'<A-h>', ':BufferPrevious<CR>'},
-  {'<C-x>', ':bd<CR>'},
-  {'<C-l>', ':BufferMoveNext<CR>'},
-  {'<C-h>', ':BufferMovePrevious<CR>'},
+  ['<TAB>'] = '<C-w>w',
+  ['<A-l>'] = ':BufferNext<CR>',
+  ['<A-h>'] = ':BufferPrevious<CR>',
+  ['<C-x>'] = ':bd<CR>',
+  ['<C-l>'] = ':BufferMoveNext<CR>',
+  ['<C-h>'] = ':BufferMovePrevious<CR>',
 }
 -- if you just want to augment the existing ones then use the utility function
 -- require("utils").add_keymap_normal_mode({ silent = true }, {
@@ -34,13 +34,23 @@ lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 
 -- if you don't want all the parsers change this to a table of the ones you want
-lvim.builtin.treesitter.ensure_installed = {}
+lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.ignore_install = { "haskell" }
-lvim.builtin.treesitter.highlight.enabled = true
 
 -- Python
-lvim.lang.python.formatter.exe = "black"
-lvim.lang.python.linters = { "mypy" }
+lvim.lang.python.formatters = {
+  {
+    exe = "black",
+    args = {}
+  }
+}
+-- set an additional linter
+lvim.lang.python.linters = {
+  {
+    exe = "mypy",
+    args = {}
+  }
+}
 
 -- generic LSP settings
 -- you can set a custom on_attach function that will be used for all the language servers
@@ -67,6 +77,10 @@ lvim.plugins = {
 }
 vim.g["sneak#s_next"] = 1
 vim.g["sneak#label"] = 1
+vim.api.nvim_set_keymap('', 'f', '<Plug>Sneak_f', {})
+vim.api.nvim_set_keymap('', 'F', '<Plug>Sneak_F', {})
+vim.api.nvim_set_keymap('', 't', '<Plug>Sneak_t', {})
+vim.api.nvim_set_keymap('', 'T', '<Plug>Sneak_f', {})
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
