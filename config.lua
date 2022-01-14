@@ -37,6 +37,8 @@ lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 
+lvim.lsp.diagnostics.virtual_text = false
+
 -- Python
 lvim.lang.python.formatters = {
   {
@@ -47,7 +49,7 @@ lvim.lang.python.formatters = {
 -- set an additional linter
 lvim.lang.python.linters = {
   {
-    exe = "mypy",
+    exe = "flake8",
     args = {}
   }
 }
@@ -81,6 +83,8 @@ vim.api.nvim_set_keymap('', 'f', '<Plug>Sneak_f', {})
 vim.api.nvim_set_keymap('', 'F', '<Plug>Sneak_F', {})
 vim.api.nvim_set_keymap('', 't', '<Plug>Sneak_t', {})
 vim.api.nvim_set_keymap('', 'T', '<Plug>Sneak_f', {})
+vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
+vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
