@@ -89,7 +89,6 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 
-lvim.lsp.diagnostics.virtual_text = false
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- generic LSP settings
