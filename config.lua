@@ -11,7 +11,7 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
--- lvim.lint_on_save = true
+lvim.lint_on_save = true
 lvim.colorscheme = "onedarker"
 vim.opt.relativenumber = true
 
@@ -87,8 +87,9 @@ lvim.builtin.treesitter.ensure_installed = {
   "java",
   "yaml",
 }
-
 lvim.builtin.treesitter.ignore_install = { "haskell" }
+
+lvim.lsp.diagnostics.virtual_text = false
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- generic LSP settings
@@ -161,6 +162,7 @@ linters.setup {
 --   },
 }
 
+-- Additional Plugins
 lvim.plugins = {
     {
       "justinmk/vim-sneak",
@@ -178,6 +180,12 @@ vim.api.nvim_set_keymap('', 'f', '<Plug>Sneak_f', {})
 vim.api.nvim_set_keymap('', 'F', '<Plug>Sneak_F', {})
 vim.api.nvim_set_keymap('', 't', '<Plug>Sneak_t', {})
 vim.api.nvim_set_keymap('', 'T', '<Plug>Sneak_f', {})
+vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
+vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
+-- Autocommands (https://neovim.io/doc/user/autocmd.html)
+-- lvim.autocommands.custom_groups = {
+--   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+-- }
 
 
 -- Additional Leader bindings for WhichKey
