@@ -164,7 +164,8 @@ linters.setup {
 -- Additional Plugins
 lvim.plugins = {
     {
-      "justinmk/vim-sneak",
+      'ggandor/lightspeed.nvim',
+      requires = 'tpope/vim-repeat',
       event = "BufRead"
     },
     {
@@ -173,12 +174,6 @@ lvim.plugins = {
       event = "BufRead"
     }
 }
-vim.g["sneak#s_next"] = 1
-vim.g["sneak#label"] = 1
-vim.api.nvim_set_keymap('', 'f', '<Plug>Sneak_f', {})
-vim.api.nvim_set_keymap('', 'F', '<Plug>Sneak_F', {})
-vim.api.nvim_set_keymap('', 't', '<Plug>Sneak_t', {})
-vim.api.nvim_set_keymap('', 'T', '<Plug>Sneak_f', {})
 vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
 vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
