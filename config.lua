@@ -21,11 +21,11 @@ lvim.leader = "space"
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode = {
   ['<TAB>'] = '<C-w>w',
-  ['<A-l>'] = ':BufferNext<CR>',
-  ['<A-h>'] = ':BufferPrevious<CR>',
+  ['<A-l>'] = ':BufferLineCycleNext<CR>',
+  ['<A-h>'] = ':BufferLineCyclePrev<CR>',
   ['<C-x>'] = ':bd<CR>',
-  ['<C-l>'] = ':BufferMoveNext<CR>',
-  ['<C-h>'] = ':BufferMovePrevious<CR>',
+  ['<C-l>'] = ':BufferLineMoveNext<CR>',
+  ['<C-h>'] = ':BufferLineMovePrev<CR>',
 }
 -- Swap ':' with ';'
 vim.api.nvim_set_keymap('', ';', ':', {noremap = true})
@@ -100,6 +100,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- See the full default list `:lua print(vim.inspect(lvim.lsp.override))`
 -- vim.list_extend(lvim.lsp.override, { "pyright" })
 
+-- lvim.lsp.pyright.setup.settings.python.analysis.typeCheckingMode = "off"
 -- ---@usage setup a server -- see: https://www.lunarvim.org/languages/#overriding-the-default-configuration
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
 -- require("lvim.lsp.manager").setup("pylsp", opts)
@@ -147,18 +148,18 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { exe = "flake8", filetypes = { "python" } },
+  { exe = "mypy", filetypes = { "python" } },
   {
     exe = "shellcheck",
     ---@usage arguments to pass to the formatter
     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
     args = { "--severity", "warning" },
   },
-  -- {
---     exe = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
---   },
+  {
+    exe = "codespell",
+    ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+    filetypes = { "javascript", "python" },
+  },
 }
 
 -- Additional Plugins
