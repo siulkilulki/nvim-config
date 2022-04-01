@@ -68,10 +68,11 @@ vim.api.nvim_set_keymap('', ':', ';', {noremap = true})
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
+lvim.builtin.alpha.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
+lvim.builtin.dap.active = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -98,11 +99,20 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- ---@usage Select which servers should be configured manually. Requires `:LvimCacheRest` to take effect.
 -- See the full default list `:lua print(vim.inspect(lvim.lsp.override))`
--- vim.list_extend(lvim.lsp.override, { "pyright" })
+vim.list_extend(lvim.lsp.override, { "pyright" })
+local opts = {
+    settings = {
+      pyright = {
+          disableOrganizeImports  = true,
+          typeCheckingMode = "off"
+        }
+    }
 
+} -- check the lspconfig documentation for a list of all possible options
+
+require("lvim.lsp.manager").setup("pyright", opts)
 -- lvim.lsp.pyright.setup.settings.python.analysis.typeCheckingMode = "off"
 -- ---@usage setup a server -- see: https://www.lunarvim.org/languages/#overriding-the-default-configuration
--- local opts = {} -- check the lspconfig documentation for a list of all possible options
 -- require("lvim.lsp.manager").setup("pylsp", opts)
 
 -- you can set a custom on_attach function that will be used for all the language servers
@@ -134,7 +144,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   { exe = "black", filetypes = { "python" } },
-  -- { exe = "isort", filetypes = { "python" } },
+  { exe = "isort", filetypes = { "python" } },
 --   {
 --     exe = "prettier",
 --     ---@usage arguments to pass to the formatter
@@ -166,15 +176,33 @@ linters.setup {
 lvim.plugins = {
     {
       'ggandor/lightspeed.nvim',
-      requires = 'tpope/vim-repeat',
-      event = "BufRead"
+      requires = 'tpope/vim-repeat'
+      -- event = "BufRead"
     },
     {
       'TimUntersberger/neogit',
       requires = 'nvim-lua/plenary.nvim',
       event = "BufRead"
-    }
+    },
+    { "nvim-telescope/telescope-dap.nvim" },
+    { "rcarriga/nvim-dap-ui",
+      requires = {"mfussenegger/nvim-dap"}},
+    {'mfussenegger/nvim-dap-python'},
+    {'HiPhish/debugpy.nvim'},
+    {'theHamsta/nvim-dap-virtual-text'}
 }
+require("dapui").setup()
+local dap, dapui = require("dap"), require("dapui")
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
 vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
 vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
@@ -198,3 +226,39 @@ lvim.builtin.which_key.mappings["g"].g = { "<cmd>Neogit<CR>", "Neogit" }
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
 -- }
+
+-- require("luasnip.loaders.from_lua").load({paths = "~/.config/lvim/snippets/my-snippets"})
+-- require("luasnip/loaders/from_lua").load { paths = { "~/.config/lvim/snippets/my-snippets/" } }
+
+local ls = require("luasnip")
+local s = ls.snippet
+local t = ls.text_node
+local i = ls.insert_node
+
+ls.snippets = {
+  python = {
+	s("dbg", {
+		-- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
+	t({"# fmt: off",
+     "import threading, debugpy; thread_id = threading.get_native_id(); port = thread_id%(65535-1023)+1024; host, port = debugpy.listen(port); print(f'Debugpy: Listening on {host}:{port}. Thread id: {thread_id}'); debugpy.wait_for_client(); print(f'Client attached'); debugpy.breakpoint()",
+     "# fmt: on"}
+  )
+	})
+}}
+
+
+vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+_G.debugpy_attach = function()
+  local port = vim.fn.input('Debug port: ')
+  require("nvim-dap-virtual-text").setup{
+        enabled = true,
+        enabled_commands = true
+  }
+  vim.cmd(':Debugpy attach 127.0.0.1 ' .. port)
+end
+
+
+lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
+lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
+
+
