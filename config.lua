@@ -247,7 +247,20 @@ ls.snippets = {
 }}
 
 
-vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+_G.debug_mode = function ()
+   require('dap.ext.autocompl').attach()
+   vim.cmd([[
+      nnoremap <buffer> n :lua require'dap'.step_over()<cr>
+      nnoremap <buffer> s :lua require'dap'.step_into()<cr>
+      nnoremap <buffer> p :lua require'dap'.step_back()<cr>
+      nnoremap <buffer> u :lua require'dap'.up()<cr>
+      nnoremap <buffer> d :lua require'dap'.down()<cr>
+      nnoremap <buffer> c :lua require'dap'.continue()<cr>
+   ]])
+end
+
+
+vim.cmd("au FileType dap-repl lua debug_mode()")
 _G.debugpy_attach = function()
   local port = vim.fn.input('Debug port: ')
   require("nvim-dap-virtual-text").setup{
