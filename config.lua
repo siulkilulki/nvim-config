@@ -28,8 +28,8 @@ lvim.keys.normal_mode = {
   ['<C-h>'] = ':BufferLineMovePrev<CR>',
 }
 -- Swap ':' with ';'
-vim.api.nvim_set_keymap('', ';', ':', {noremap = true})
-vim.api.nvim_set_keymap('', ':', ';', {noremap = true})
+vim.api.nvim_set_keymap('', ';', ':', { noremap = true })
+vim.api.nvim_set_keymap('', ':', ';', { noremap = true })
 
 -- unmap a default keymapping
 -- lvim.keys.normal_mode["<C-Up>"] = ""
@@ -101,12 +101,12 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- See the full default list `:lua print(vim.inspect(lvim.lsp.override))`
 vim.list_extend(lvim.lsp.override, { "pyright" })
 local opts = {
-    settings = {
-      pyright = {
-          disableOrganizeImports  = true,
-          typeCheckingMode = "off"
-        }
+  settings = {
+    pyright = {
+      disableOrganizeImports = true,
+      typeCheckingMode       = "off"
     }
+  }
 
 } -- check the lspconfig documentation for a list of all possible options
 
@@ -145,14 +145,14 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   { exe = "black", filetypes = { "python" } },
   { exe = "isort", filetypes = { "python" } },
---   {
---     exe = "prettier",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     args = { "--print-with", "100" },
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "typescript", "typescriptreact" },
---   },
+  --   {
+  --     exe = "prettier",
+  --     ---@usage arguments to pass to the formatter
+  --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+  --     args = { "--print-with", "100" },
+  --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+  --     filetypes = { "typescript", "typescriptreact" },
+  --   },
 }
 
 -- -- set additional linters
@@ -174,22 +174,22 @@ linters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
-    {
-      'ggandor/lightspeed.nvim',
-      requires = 'tpope/vim-repeat'
-      -- event = "BufRead"
-    },
-    {
-      'TimUntersberger/neogit',
-      requires = 'nvim-lua/plenary.nvim',
-      event = "BufRead"
-    },
-    { "nvim-telescope/telescope-dap.nvim" },
-    { "rcarriga/nvim-dap-ui",
-      requires = {"mfussenegger/nvim-dap"}},
-    {'mfussenegger/nvim-dap-python'},
-    {'HiPhish/debugpy.nvim'},
-    {'theHamsta/nvim-dap-virtual-text'}
+  {
+    'ggandor/lightspeed.nvim',
+    requires = 'tpope/vim-repeat'
+    -- event = "BufRead"
+  },
+  {
+    'TimUntersberger/neogit',
+    requires = 'nvim-lua/plenary.nvim',
+    event = "BufRead"
+  },
+  { "nvim-telescope/telescope-dap.nvim" },
+  { "rcarriga/nvim-dap-ui",
+    requires = { "mfussenegger/nvim-dap" } },
+  { 'mfussenegger/nvim-dap-python' },
+  { 'HiPhish/debugpy.nvim' },
+  { 'theHamsta/nvim-dap-virtual-text' }
 }
 require("dapui").setup()
 local dap, dapui = require("dap"), require("dapui")
@@ -227,45 +227,29 @@ lvim.builtin.which_key.mappings["g"].g = { "<cmd>Neogit<CR>", "Neogit" }
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
 -- }
 
--- require("luasnip.loaders.from_lua").load({paths = "~/.config/lvim/snippets/my-snippets"})
--- require("luasnip/loaders/from_lua").load { paths = { "~/.config/lvim/snippets/my-snippets/" } }
+require("luasnip.loaders.from_lua").load({ paths = "~/.config/lvim/snippets/my-snippets" })
 
-local ls = require("luasnip")
-local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
-
-ls.snippets = {
-  python = {
-	s("dbg", {
-		-- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
-	t({"# fmt: off",
-     "import threading, debugpy; thread_id = threading.get_native_id(); port = thread_id%(65535-1023)+1024; host, port = debugpy.listen(port); print(f'Debugpy: Listening on {host}:{port}. Thread id: {thread_id}'); debugpy.wait_for_client(); print(f'Client attached'); debugpy.breakpoint()",
-     "# fmt: on"}
-  )
-	})
-}}
-
-
-_G.debug_mode = function ()
-   require('dap.ext.autocompl').attach()
-   vim.cmd([[
+_G.debug_mode = function()
+  require('dap.ext.autocompl').attach()
+  vim.cmd([[
       nnoremap <buffer> n :lua require'dap'.step_over()<cr>
       nnoremap <buffer> s :lua require'dap'.step_into()<cr>
       nnoremap <buffer> p :lua require'dap'.step_back()<cr>
       nnoremap <buffer> u :lua require'dap'.up()<cr>
       nnoremap <buffer> d :lua require'dap'.down()<cr>
       nnoremap <buffer> c :lua require'dap'.continue()<cr>
+      inoremap <buffer> <C-x> <C-x><C-o>
    ]])
 end
+
 
 
 vim.cmd("au FileType dap-repl lua debug_mode()")
 _G.debugpy_attach = function()
   local port = vim.fn.input('Debug port: ')
-  require("nvim-dap-virtual-text").setup{
-        enabled = true,
-        enabled_commands = true
+  require("nvim-dap-virtual-text").setup {
+    enabled = true,
+    enabled_commands = true
   }
   vim.cmd(':Debugpy attach 127.0.0.1 ' .. port)
 end
@@ -273,5 +257,3 @@ end
 
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
 lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
-
-
