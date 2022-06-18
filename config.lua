@@ -235,8 +235,8 @@ _G.debug_mode = function()
       nnoremap <buffer> n :lua require'dap'.step_over()<cr>
       nnoremap <buffer> s :lua require'dap'.step_into()<cr>
       nnoremap <buffer> p :lua require'dap'.step_back()<cr>
-      nnoremap <buffer> u :lua require'dap'.up()<cr>
-      nnoremap <buffer> d :lua require'dap'.down()<cr>
+      nnoremap <buffer> k :lua require'dap'.up()<cr>
+      nnoremap <buffer> j :lua require'dap'.down()<cr>
       nnoremap <buffer> c :lua require'dap'.continue()<cr>
       inoremap <buffer> <C-x> <C-x><C-o>
    ]])
@@ -257,3 +257,4 @@ end
 
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
 lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
+lvim.builtin.which_key.mappings["c"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>", "Copy to local machine" }
