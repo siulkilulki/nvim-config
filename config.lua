@@ -145,10 +145,10 @@ require("lvim.lsp.manager").setup("pyright", opts)
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-  { exe = "black", filetypes = { "python" } },
-  { exe = "isort", filetypes = { "python" } },
+  { command = "black", filetypes = { "python" } },
+  { command = "isort", filetypes = { "python" } },
   --   {
-  --     exe = "prettier",
+  --     command = "prettier",
   --     ---@usage arguments to pass to the formatter
   --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
   --     args = { "--print-with", "100" },
@@ -160,15 +160,15 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { exe = "mypy", filetypes = { "python" } },
+  { command = "mypy", filetypes = { "python" } },
   {
-    exe = "shellcheck",
+    command = "shellcheck",
     ---@usage arguments to pass to the formatter
     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
     args = { "--severity", "warning" },
   },
   {
-    exe = "codespell",
+    command = "codespell",
     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
     filetypes = { "javascript", "python" },
   },
@@ -191,8 +191,10 @@ lvim.plugins = {
     requires = { "mfussenegger/nvim-dap" } },
   { 'mfussenegger/nvim-dap-python' },
   { 'HiPhish/debugpy.nvim' },
-  { 'theHamsta/nvim-dap-virtual-text' }
+  { 'theHamsta/nvim-dap-virtual-text' },
+  { 'hrsh7th/cmp-nvim-lsp-signature-help' }
 }
+vim.list_extend(lvim.builtin.cmp.sources, { { name = "nvim_lsp_signature_help" } })
 require("dapui").setup()
 local dap, dapui = require("dap"), require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -259,4 +261,4 @@ end
 
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
 lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
-lvim.builtin.which_key.mappings["c"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>", "Copy to local machine" }
+lvim.builtin.which_key.mappings["r"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>", "Copy to local machine" }
