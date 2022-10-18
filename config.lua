@@ -19,8 +19,11 @@ vim.opt.relativenumber = true
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+if vim.env.TERM == 'xterm-kitty' then
+  vim.cmd([[autocmd UIEnter * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[>1u") | endif]])
+  vim.cmd([[autocmd UILeave * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[<1u") | endif]])
+end
 lvim.keys.normal_mode = {
-  ['<TAB>'] = '<C-w>w',
   ['<A-l>'] = ':BufferLineCycleNext<CR>',
   ['<A-h>'] = ':BufferLineCyclePrev<CR>',
   ['<C-x>'] = ':bd<CR>',
@@ -262,3 +265,4 @@ end
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
 lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
 lvim.builtin.which_key.mappings["r"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>", "Copy to local machine" }
+lvim.builtin.which_key.mappings["w"] = { "<C-w>w", "Switch tab" }
