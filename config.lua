@@ -12,7 +12,7 @@ an executable
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.lint_on_save = true
-lvim.colorscheme = "onedarker"
+-- lvim.colorscheme = "onedarker"
 vim.opt.relativenumber = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
@@ -73,7 +73,7 @@ vim.api.nvim_set_keymap('', ':', ';', { noremap = true })
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
+-- lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
@@ -196,6 +196,19 @@ lvim.plugins = {
   { 'HiPhish/debugpy.nvim' },
   { 'theHamsta/nvim-dap-virtual-text' },
   { 'hrsh7th/cmp-nvim-lsp-signature-help' }
+  -- {
+  --   "nvim-neorg/neorg",
+  --   -- tag = "*",
+  --   ft = "norg",
+  --   after = "nvim-treesitter", -- You may want to specify Telescope here as well
+  --   config = function()
+  --       require('neorg').setup {
+  --         load = {
+  --           ["core.defaults"] = {}
+  --         }
+  --       }
+  --   end
+  -- }
 }
 vim.list_extend(lvim.builtin.cmp.sources, { { name = "nvim_lsp_signature_help" } })
 require("dapui").setup()
@@ -264,5 +277,6 @@ end
 
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
 lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
-lvim.builtin.which_key.mappings["r"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>", "Copy to local machine" }
+lvim.builtin.which_key.mappings["r"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>",
+  "Copy to local machine" }
 lvim.builtin.which_key.mappings["w"] = { "<C-w>w", "Switch tab" }
