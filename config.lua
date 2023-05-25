@@ -12,7 +12,7 @@ an executable
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.lint_on_save = true
--- lvim.colorscheme = "onedarker"
+lvim.colorscheme = "tokyonight-day"
 vim.opt.relativenumber = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
@@ -109,10 +109,12 @@ local opts = {
   settings = {
     pyright = {
       disableOrganizeImports = true,
-      typeCheckingMode       = "off"
+      typeCheckingMode = "off",
+      -- linting = {
+      --   mypyEnabled = true
+      -- }
     }
   }
-
 } -- check the lspconfig documentation for a list of all possible options
 
 require("lvim.lsp.manager").setup("pyright", opts)
@@ -185,17 +187,50 @@ lvim.plugins = {
     -- event = "BufRead"
   },
   {
+    'sindrets/diffview.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('diffview').setup({
+        merge_tool = {
+          layout = "diff3_mixed"
+        }
+      })
+    end,
+  },
+  {
     'TimUntersberger/neogit',
-    requires = 'nvim-lua/plenary.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim'
+    },
+    config = function()
+      require('neogit').setup({
+        integrations = {
+          diffview = true
+        }
+      })
+    end,
     event = "BufRead"
   },
   { "nvim-telescope/telescope-dap.nvim" },
-  { "rcarriga/nvim-dap-ui",
-    requires = { "mfussenegger/nvim-dap" } },
+  -- {
+  --   "rcarriga/nvim-dap-ui",
+  --   requires = { "mfussenegger/nvim-dap" }
+  -- },
   { 'mfussenegger/nvim-dap-python' },
   { 'HiPhish/debugpy.nvim' },
   { 'theHamsta/nvim-dap-virtual-text' },
-  { 'hrsh7th/cmp-nvim-lsp-signature-help' }
+  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+  -- {
+  --   'folke/tokyonight.nvim',
+  --   config = function()
+  --     -- require("user.theme").tokyonight()
+  --     require("tokyonight").setup() {
+  --       style = "day"
+  --     }
+  --     vim.cmd [[colorscheme tokyonight]]
+  --   end
+  -- }
   -- {
   --   "nvim-neorg/neorg",
   --   -- tag = "*",
@@ -210,6 +245,16 @@ lvim.plugins = {
   --   end
   -- }
 }
+
+-- Your personal default settings
+local default = { justMyCode = false }
+
+-- Implementation which injects your default settings
+require('debugpy').run = function(config)
+  local final = vim.tbl_extend('keep', config, default)
+  require('dap').run(final)
+end
+
 vim.list_extend(lvim.builtin.cmp.sources, { { name = "nvim_lsp_signature_help" } })
 require("dapui").setup()
 local dap, dapui = require("dap"), require("dapui")
@@ -243,9 +288,15 @@ lvim.builtin.which_key.mappings["g"].g = { "<cmd>Neogit<CR>", "Neogit" }
 -- }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
+-- lvim.autocommands = {
+--   {
+--     "BufWritePost", {
+--       pattern = { "*" },
+--       command = "echo strftime('%c')"
+--     }
+--   },
 -- }
+
 
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/lvim/snippets/my-snippets" })
 
@@ -254,7 +305,6 @@ _G.debug_mode = function()
   vim.cmd([[
       nnoremap <buffer> n :lua require'dap'.step_over()<cr>
       nnoremap <buffer> s :lua require'dap'.step_into()<cr>
-      nnoremap <buffer> p :lua require'dap'.step_back()<cr>
       nnoremap <buffer> k :lua require'dap'.up()<cr>
       nnoremap <buffer> j :lua require'dap'.down()<cr>
       nnoremap <buffer> c :lua require'dap'.continue()<cr>
@@ -262,6 +312,7 @@ _G.debug_mode = function()
    ]])
 end
 
+-- nnoremap <buffer> p :lua require'dap'.step_back()<cr>
 
 
 vim.cmd("au FileType dap-repl lua debug_mode()")
@@ -276,7 +327,11 @@ end
 
 
 lvim.builtin.which_key.mappings["da"] = { ":lua debugpy_attach()<CR>", "Attach" }
-lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
-lvim.builtin.which_key.mappings["r"] = { ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>",
+-- lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').toggle()<CR>", "Toggle UI" }
+lvim.builtin.which_key.mappings["de"] = { ":lua require('dapui').repl.open({}, 'vsplit')<CR>", "Toggle UI" }
+lvim.builtin.which_key.mappings["r"] = {
+  ":echo system('socat - UNIX-CONNECT:/raid/djurkiewicz/.sockets/clipboard.sock', getreg('+'))<CR>",
   "Copy to local machine" }
 lvim.builtin.which_key.mappings["w"] = { "<C-w>w", "Switch tab" }
+lvim.builtin.which_key.mappings['c'] = {}
+lvim.builtin.which_key.mappings['x'] = { "<cmd>BufferKill<CR>", "Close Buffer" }
