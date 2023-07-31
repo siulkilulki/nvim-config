@@ -109,6 +109,9 @@ local opts = {
   settings = {
     pyright = {
       disableOrganizeImports = true,
+      analysis = {
+        typeCheckingMode = "off",
+      },
       typeCheckingMode = "off",
       -- linting = {
       --   mypyEnabled = true
@@ -118,7 +121,6 @@ local opts = {
 } -- check the lspconfig documentation for a list of all possible options
 
 require("lvim.lsp.manager").setup("pyright", opts)
--- lvim.lsp.pyright.setup.settings.python.analysis.typeCheckingMode = "off"
 -- ---@usage setup a server -- see: https://www.lunarvim.org/languages/#overriding-the-default-configuration
 -- require("lvim.lsp.manager").setup("pylsp", opts)
 
@@ -165,7 +167,7 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { command = "mypy", filetypes = { "python" } },
+  -- { command = "mypy", filetypes = { "python" } },
   {
     command = "shellcheck",
     ---@usage arguments to pass to the formatter
@@ -183,12 +185,11 @@ linters.setup {
 lvim.plugins = {
   {
     'ggandor/lightspeed.nvim',
-    requires = 'tpope/vim-repeat'
-    -- event = "BufRead"
+    dependencies = 'tpope/vim-repeat'
   },
   {
     'sindrets/diffview.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('diffview').setup({
         merge_tool = {
@@ -199,7 +200,7 @@ lvim.plugins = {
   },
   {
     'TimUntersberger/neogit',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
       'sindrets/diffview.nvim'
     },
@@ -220,7 +221,18 @@ lvim.plugins = {
   { 'mfussenegger/nvim-dap-python' },
   { 'HiPhish/debugpy.nvim' },
   { 'theHamsta/nvim-dap-virtual-text' },
-  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+  -- { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+  {
+    "max397574/better-escape.nvim",
+    config = function()
+      require("better_escape").setup({
+        mapping = { "jk", "kj" },
+        timeout = vim.o.timeoutlen,
+        clear_empty_lines = false,
+        keys = "<Esc>",
+      })
+    end,
+  }
   -- {
   --   'folke/tokyonight.nvim',
   --   config = function()
