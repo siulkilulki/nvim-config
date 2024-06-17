@@ -14,6 +14,18 @@ lvim.format_on_save = true
 lvim.lint_on_save = true
 lvim.colorscheme = "tokyonight-day"
 vim.opt.relativenumber = true
+vim.opt.fillchars = {
+  fold = ' ',
+  diff = '╱',
+  wbr = '─',
+  msgsep = '─',
+  horiz = ' ',
+  horizup = '│',
+  horizdown = '│',
+  vertright = '│',
+  vertleft = '│',
+  verthoriz = '│',
+}
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -167,7 +179,7 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  -- { command = "mypy", filetypes = { "python" } },
+  { command = "mypy", filetypes = { "python" } },
   {
     command = "shellcheck",
     ---@usage arguments to pass to the formatter
@@ -232,8 +244,24 @@ lvim.plugins = {
         keys = "<Esc>",
       })
     end,
-  }
+  },
+  {
+    'rmagatti/auto-session',
+    config = function()
+      require("auto-session").setup({
+        log_level = "error",
+        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+      })
+    end,
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
   -- {
+  --
   --   'folke/tokyonight.nvim',
   --   config = function()
   --     -- require("user.theme").tokyonight()
@@ -347,3 +375,4 @@ lvim.builtin.which_key.mappings["r"] = {
 lvim.builtin.which_key.mappings["w"] = { "<C-w>w", "Switch tab" }
 lvim.builtin.which_key.mappings['c'] = {}
 lvim.builtin.which_key.mappings['x'] = { "<cmd>BufferKill<CR>", "Close Buffer" }
+lvim.builtin.which_key.setup.plugins.marks = true
