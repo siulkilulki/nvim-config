@@ -35,16 +35,42 @@ vim.api.nvim_set_keymap("", ":", ";", { noremap = true })
 
 -- Buffers and windows
 map.set("n", "<A-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-map.set("n", "<A-h>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev buffer" })
-map.set("n", "<A-L>", "<cmd>BufferLineMoveNext<CR>", { desc = "Move buffer right" })
-map.set("n", "<A-H>", "<cmd>BufferLineMovePrev<CR>", { desc = "Move buffer left" })
+map.set("n", "<A-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
+map.set("n", "<A-L>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer right" })
+map.set("n", "<A-H>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" })
 
-map.set("n", "<leader>a", "<cmd>wincmd w<cr>", { desc = "Switch windows" })
+map.set("n", "<leader>2", "<cmd>wincmd w<cr>", { desc = "Switch windows" })
 map.set("n", "<leader>d", LazyVim.ui.bufremove, { desc = "Delete Buffer" })
 map.set("n", "<leader>D", "<cmd>bd<cr>", { desc = "Delete Buffer and Window" })
 
+map.set(
+  "n",
+  "gh",
+  "<cmd>on<cr><cmd>vsp<cr><cmd>lua vim.lsp.buf.definition()<cr>",
+  { desc = "Go to definition in the right window" }
+)
 -- Git
 map.set("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Run neogit" })
 
 -- Filesystem
-map.set("n", "<leader>o", "<cmd>Oil<cr>", { desc = "Oil" })
+
+map.set("n", "<leader>O", "<cmd>Oil<cr>", { desc = "Oil" })
+
+-- Orgmode
+map.set(
+  "n",
+  "<leader>o<Tab>",
+  "<cmd>lua require('orgmode').action('org_mappings.toggle_checkbox')<cr>",
+  { desc = "org toggle checkbox" }
+)
+
+-- Visual debug
+map.set(
+  "n",
+  "<leader>t",
+  "Otry:<esc>joexcept:<cr>__import__('ipdb').set_trace()<esc>>>kk>>^",
+  { desc = "try catch ipdb" }
+)
+
+-- Auto import
+-- map.set("n", "<leader>i", "ea ", { desc = "Auto import" })
