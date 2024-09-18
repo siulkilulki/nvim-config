@@ -63,6 +63,7 @@ map.set(
   "<cmd>lua require('orgmode').action('org_mappings.toggle_checkbox')<cr>",
   { desc = "org toggle checkbox" }
 )
+map.set("n", "<leader>oil", "o- [ ] ", { desc = "org add checkbox" })
 
 -- Visual debug
 map.set(
