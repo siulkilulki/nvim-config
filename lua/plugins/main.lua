@@ -1,4 +1,17 @@
+local actions = require("telescope.actions")
+
 return {
+  {
+    "folke/noice.nvim",
+    opts = {
+      routes = {
+        {
+          view = "notify",
+          filter = { event = "msg_showmode" },
+        },
+      },
+    },
+  },
   {
     "NeogitOrg/neogit",
     dependencies = {
@@ -10,6 +23,25 @@ return {
       -- "ibhagwan/fzf-lua", -- optional
     },
     config = true,
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = {
+      defaults = {
+        mappings = {
+          i = {
+            ["<C-n>"] = actions.cycle_history_next,
+            ["<C-p>"] = actions.cycle_history_prev,
+          },
+        },
+      },
+    },
+  },
+  {
+    "N1kica/telescope-changed-files",
+    config = function()
+      require("telescope").load_extension("changed_files")
+    end,
   },
   -- lua with lazy.nvim
   {
@@ -29,10 +61,36 @@ return {
   --   },
   -- },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      preset = "modern",
+    },
+  },
+  {
     "stevearc/oil.nvim",
     opts = {},
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
+    "cuducos/yaml.nvim",
+    ft = { "yaml" }, -- optional
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim", -- optional
+    },
+  },
+  { -- just for yaml key/value in lualine
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup({
+        sections = {
+          lualine_x = { require("yaml_nvim").get_yaml_key_and_value },
+        },
+      })
+    end,
   },
   {
     "nvim-orgmode/orgmode",
@@ -52,5 +110,11 @@ return {
       --   ignore_install = { 'org' },
       -- })
     end,
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    opts = {
+      model = "claude-sonnet-4",
+    },
   },
 }

@@ -7,10 +7,10 @@ local map = vim.keymap
 -- Delete keymaps
 
 -- lazygit
-map.del("n", "<leader>gg")
-map.del("n", "<leader>gG")
-map.del("n", "<leader>gl")
-map.del("n", "<leader>gL")
+--map.del("n", "<leader>gg")
+--map.del("n", "<leader>gG")
+--map.del("n", "<leader>gl")
+--map.del("n", "<leader>gL")
 
 -- windows
 -- map.del("n", "<leader>ww")
@@ -40,7 +40,10 @@ map.set("n", "<A-L>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer right
 map.set("n", "<A-H>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" })
 
 map.set("n", "<leader>2", "<cmd>wincmd w<cr>", { desc = "Switch windows" })
-map.set("n", "<leader>d", LazyVim.ui.bufremove, { desc = "Delete Buffer" })
+map.set("n", "<leader>d", function()
+  Snacks.bufdelete()
+end, { desc = "Delete Buffer" }) -- was used for debugging in which-key
+
 map.set("n", "<leader>D", "<cmd>bd<cr>", { desc = "Delete Buffer and Window" })
 
 map.set(
@@ -55,6 +58,7 @@ map.set("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Run neogit" })
 -- Filesystem
 
 map.set("n", "<leader>O", "<cmd>Oil<cr>", { desc = "Oil" })
+--map.set("n", "<leader>fd", "<cmd>Telescope changed_files<cr>", { desc = "Preview changed files" })
 
 -- Orgmode
 map.set(
@@ -69,7 +73,7 @@ map.set("n", "<leader>oil", "o- [ ] ", { desc = "org add checkbox" })
 map.set(
   "n",
   "<leader>t",
-  "Otry:<esc>joexcept:<cr>__import__('ipdb').set_trace()<esc>>>kk>>^",
+  "Otry:<esc>j>>oexcept:<cr>__import__('ipdb').set_trace()<esc>kk^",
   { desc = "try catch ipdb" }
 )
 
