@@ -79,3 +79,21 @@ map.set(
 
 -- Auto import
 -- map.set("n", "<leader>i", "ea ", { desc = "Auto import" })
+
+-- Avante.nvim - Simple toggle for auto-suggestions (minimal approach)
+-- map.set('n', '<leader>aS', function()
+--   -- Test if keymap works first
+--   vim.notify("Keymap <leader>aS is working!", vim.log.levels.INFO)
+--
+--   -- Initialize global state if not exists
+--   if vim.g.avante_auto_suggestions == nil then
+--     vim.g.avante_auto_suggestions = false
+--   end
+--
+--   -- Toggle the state
+--   vim.g.avante_auto_suggestions = not vim.g.avante_auto_suggestions
+--
+--   -- User feedback
+--   local status = vim.g.avante_auto_suggestions and "ENABLED" or "DISABLED"
+--   vim.notify("Avante auto-suggestions: " .. status, vim.log.levels.INFO)
+-- end, { desc = 'Toggle Avante auto-suggestions' })

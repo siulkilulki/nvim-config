@@ -111,10 +111,20 @@ return {
       -- })
     end,
   },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   opts = {
+  --     model = "claude-sonnet-4",
+  --   },
+  -- },
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    opts = {
-      model = "claude-sonnet-4",
-    },
+    "zbirenbaum/copilot.lua",
+    -- Use opts override so it merges with LazyExtras and forces gpt-5
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.copilot_model = "gpt-5"
+      return opts
+    end,
   },
+
 }
